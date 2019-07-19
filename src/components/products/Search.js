@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import { Row, Col, Form, Button } from 'react-bootstrap';
 
 import ProductsContext from '../../context/products/productsContext';
 
@@ -16,29 +17,35 @@ const Search = () => {
             productsContext.searchProducts(text);
             setText('');
         }
-    }
+    };
 
     return (
-        <div>
-            <form className="form"
-                onSubmit={onSubmit}>
-                <input type="text"
-                    name="text"
-                    placeholder="Search Products..."
-                    value={text}
-                    onChange={onChange} />
-                <input type="submit"
-                    value="Search"
-                    className="btn btn-dark btn-block" />
-            </form>
-            {productsContext.searched.length > 0 &&
-                <button className="btn btn-light btn-block"
-                onClick={productsContext.clearProducts}>
-                    Clear
-                </button>
-            }
-        </div>
-    )
-}
+        <Form onSubmit={onSubmit}>
+            <Row>
+                <Col xs={9}>
+                    <Form.Group controlId="formBasicEmail">
+                        <Form.Control
+                            type="text"
+                            onChange={onChange}
+                            value={text}
+                            placeholder="Search Products..." />
+                    </Form.Group>
+                </Col>
+                <Col>
+                    <Button variant="primary" type="submit">
+                        Search
+                    </Button>
+                    {
+                        productsContext.searched.length > 0 &&
+                        <Button variant="secondary"
+                            onClick={productsContext.clearProducts}>
+                            Clear
+                        </Button>
+                    }
+                </Col>
+            </Row>
+        </Form>
+    );
+};
 
 export default Search;

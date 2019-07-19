@@ -5,6 +5,7 @@ import ProductsReducer from './productsReducer';
 import {
     GET_PRODUCTS,
     SEARCH_PRODUCTS,
+    SEARCH_PRODUCTS_BY_CATEGORY,
     SET_LOADING,
     CLEAR_PRODUCTS
 } from '../types';
@@ -12,8 +13,12 @@ import {
 const ProductsState = props => {
     const initialState = {
         products: [],
-        searched: [],
-        loading: false
+
+        search_term: '',
+        category: '',
+        showClear: false,
+
+        loading: true
     };
 
     const [state, dispatch] = useReducer(ProductsReducer, initialState);
@@ -36,17 +41,51 @@ const ProductsState = props => {
 
         const res = await axios.get('https://demo8421975.mockable.io/products');
 
+        let products = [];
+        if (state.category) {
+            products = res.data.products
+                .filter(product => {
+                    return product.bsr_category.toLowerCase().indexOf(state.category.toLowerCase()) > -1
+                })
+                .filter(product => {
+                    return product.name.toLowerCase().indexOf(search_term.toLowerCase()) > -1
+                });
+        } else {
+            products = res.data.products.filter(product => {
+                return product.name.toLowerCase().indexOf(search_term.toLowerCase()) > -1
+            })
+        };
+
         dispatch({
             type: SEARCH_PRODUCTS,
-            payload: res.data.products.filter((product) => {
-                return product.name.toLowerCase().indexOf(search_term.toLowerCase()) > -1;
-            })
+            payload: {
+                products,
+                search_term
+            }
+        });
+    };
+
+    // Get products by category
+    const searchProductsByCategory = async (category) => {
+        setLoading();
+
+        const res = await axios.get('https://demo8421975.mockable.io/products');
+
+        dispatch({
+            type: SEARCH_PRODUCTS_BY_CATEGORY,
+            payload: {
+                products: res.data.products.filter(product => {
+                    return product.bsr_category.toLowerCase().indexOf(category.toLowerCase()) > -1
+                }),
+                category
+            }
         });
     };
 
     // Clear Products
     const clearProducts = () => {
-        dispatch({ type: CLEAR_PRODUCTS })
+        getProducts();
+        dispatch({ type: CLEAR_PRODUCTS });
     };
 
     // Set loading 
@@ -57,9 +96,12 @@ const ProductsState = props => {
             value={{
                 products: state.products,
                 loading: state.loading,
-                searched: state.searched,
+                showClear: state.showClear,
+                search_term: state.search_term,
+                category: state.category,
                 getProducts,
                 searchProducts,
+                searchProductsByCategory,
                 clearProducts
             }} >
 

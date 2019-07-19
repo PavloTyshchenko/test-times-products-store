@@ -1,6 +1,7 @@
 import {
     GET_PRODUCTS,
     SEARCH_PRODUCTS,
+    SEARCH_PRODUCTS_BY_CATEGORY,
     SET_LOADING,
     CLEAR_PRODUCTS
 } from '../types';
@@ -16,13 +17,24 @@ export default (state, action) => {
         case SEARCH_PRODUCTS: 
             return {
                 ...state,
-                searched: action.payload,
+                products: action.payload.products,
+                search_term: action.payload.search_term,
+                showClear: true,
+                loading: false
+            };
+        case SEARCH_PRODUCTS_BY_CATEGORY:
+            return {
+                ...state,
+                products: action.payload.products,
+                category: action.payload.category,
+                showClear: true,
                 loading: false
             };
         case CLEAR_PRODUCTS:
             return {
                 ...state,
-                searched: [],
+                category: '',
+                showClear: false,
                 loading: false
             };
         case SET_LOADING:

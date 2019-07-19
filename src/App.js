@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Navbar from './components/layout/Navbar';
-import Search from './components/products/Search';
-import Products from './components/products/Products';
+import Layout from './components/layout/Layout';
+import NavigationBar from './components/layout/NavigationBar';
+import ProductsPage from './components/pages/ProductsPage';
 
 import ProductsState from './context/products/ProductsState';
 
@@ -11,13 +11,12 @@ import './App.css';
 function App() {
   return (
     <ProductsState>
-      <div className="App">
-        <Navbar />
-        <div className="container">
-          <Search />
-          <Products />
-        </div>
-      </div>
+      <Layout>
+
+          <NavigationBar />
+          <ProductsPage />
+
+      </Layout>
     </ProductsState>
   );
 }
