@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { CardColumns, Alert, Container } from 'react-bootstrap';
 
 import ProductItem from './ProductItem';
@@ -9,12 +9,7 @@ import ProductsContext from '../../context/products/productsContext';
 const Products = () => {
     const productsContext = useContext(ProductsContext);
 
-    const { products, loading, getProducts } = productsContext;
-
-    useEffect(() => {
-        getProducts();
-        // eslint-disable-next-line
-    }, []);
+    const { products, loading } = productsContext;
 
     if (loading) {
         return (
@@ -23,8 +18,7 @@ const Products = () => {
             </Container>
 
         );
-    }
-
+    };
 
     if (!loading && products.length === 0) {
         return (

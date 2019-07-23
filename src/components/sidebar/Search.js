@@ -1,13 +1,20 @@
-import React, { useState, useContext } from 'react'
-import { Row, Col, Form } from 'react-bootstrap';
+import React, { useState, useEffect, useContext } from 'react';
+import { withRouter } from 'react-router-dom';
+import { Form } from 'react-bootstrap';
 
 import ProductsContext from '../../context/products/productsContext';
 
-const Search = () => {
+const Search = ({ history, match }) => {
 
     const productsContext = useContext(ProductsContext);
-
     const [text, setText] = useState('');
+
+    // add representing in search if there is param in url
+    useEffect(() => {
+        if (match.params.term)
+            setText(match.params.term);
+        // eslint-disable-next-line
+    }, []);
 
     const onChange = (e) => {
         setText(e.target.value);
@@ -17,8 +24,8 @@ const Search = () => {
         e.preventDefault();
 
         if (text !== '') {
-            productsContext.searchProducts(text);
-            setText('');
+            history.push(`/products/${productsContext.category}/${text}`);
+            productsContext.searchProducts(undefined,text);
         }
     };
 
@@ -35,4 +42,4 @@ const Search = () => {
     );
 };
 
-export default Search;
+export default withRouter(Search);

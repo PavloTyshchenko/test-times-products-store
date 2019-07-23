@@ -1,7 +1,9 @@
 import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Layout from './components/layout/Layout';
-import NavigationBar from './components/layout/NavigationBar';
+import HomePage from './components/pages/HomePage';
+import AboutPage from './components/pages/AboutPage';
 import ProductsPage from './components/pages/ProductsPage';
 
 import ProductsState from './context/products/ProductsState';
@@ -11,12 +13,17 @@ import './App.css';
 function App() {
   return (
     <ProductsState>
-      <Layout>
+      <Router>
+        <Layout>
+          <Switch>
 
-          <NavigationBar />
-          <ProductsPage />
+            <Route exact path='/' component={HomePage} />
+            <Route exact path='/about' component={AboutPage} />
+            <Route path='/products/:category?/:term?' component={ProductsPage} />
 
-      </Layout>
+          </Switch>
+        </Layout>
+      </Router>
     </ProductsState>
   );
 }

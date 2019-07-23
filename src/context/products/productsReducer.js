@@ -1,9 +1,9 @@
 import {
     GET_PRODUCTS,
+    GET_CATEGORIES,
     SEARCH_PRODUCTS,
-    SEARCH_PRODUCTS_BY_CATEGORY,
     SET_LOADING,
-    CLEAR_PRODUCTS
+    CLEAR_PRODUCTS,
 } from '../types';
 
 export default (state, action) => {
@@ -14,26 +14,26 @@ export default (state, action) => {
                 products: action.payload,
                 loading: false
             };
-        case SEARCH_PRODUCTS: 
+        case GET_CATEGORIES:
             return {
                 ...state,
-                products: action.payload.products,
-                search_term: action.payload.search_term,
-                showClear: true,
+                categories: action.payload,
                 loading: false
             };
-        case SEARCH_PRODUCTS_BY_CATEGORY:
+        case SEARCH_PRODUCTS:
             return {
                 ...state,
                 products: action.payload.products,
                 category: action.payload.category,
+                search_term: action.payload.search_term,
                 showClear: true,
                 loading: false
             };
         case CLEAR_PRODUCTS:
             return {
                 ...state,
-                category: '',
+                category: 'All',
+                search_term: '',
                 showClear: false,
                 loading: false
             };
@@ -42,6 +42,7 @@ export default (state, action) => {
                 ...state,
                 loading: true
             };
+
         default:
             return state;
     }
